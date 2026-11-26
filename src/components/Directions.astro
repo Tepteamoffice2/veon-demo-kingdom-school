@@ -1,0 +1,145 @@
+---
+import { Image } from "astro:assets";
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { STAGES, PHONE_SCHOOL, SOON } from "../data/site";
+import kidsPhoto from "../assets/photos/kids-cards.jpg";
+import schoolPhoto from "../assets/photos/school-math.jpg";
+import preschoolPhoto from "../assets/photos/preschool-table.jpg";
+import lyceumPhoto from "../assets/photos/lyceum-desk.jpg";
+
+const photos: Record<string, { src: ImageMetadata; alt: string; pos: string }> = {
+  "stage-kids": { src: kidsPhoto, alt: "Діти в садочку грають з картками за столом", pos: "35% 40%" },
+  "stage-preschool": { src: preschoolPhoto, alt: "Діти за білим столом розкладають картки з цифрами", pos: "50% 40%" },
+  "stage-school": { src: schoolPhoto, alt: "Вчителька пояснює приклади біля дошки, учні за партами", pos: "50% 30%" },
+  "stage-lyceum": { src: lyceumPhoto, alt: "Учениця за партою з відкритим підручником", pos: "50% 35%" },
+};
+
+const track = [
+  { id: "track-afterschool", title: "Kingdom Afterschool", text: "Понад 20 гуртків і студій." },
+  { id: "track-camps", title: "Сезонні табори", text: "Літній, осінній, зимовий і весняний; є виїзні." },
+];
+---
+<Section id="directions" rec="R-002" class="section directions">
+  <div class="container">
+    <div class="section__head">
+      <h2>Оберіть за віком дитини</h2>
+      <p>Від першого року до 12 класу: кожен етап зі своєю адресою і своїм номером.</p>
+    </div>
+
+    <div class="stages" data-stages>
+      <span class="stages__marker" aria-hidden="true" data-crown><Icon name="crown" size={32} /></span>
+      <ol class="stages__list">
+        {STAGES.map((s) => {
+          const photo = photos[s.id];
+          return (
+            <li class:list={["stage", { "stage--photo": photo }]} id={s.id} data-stage>
+              <div class="stage__mark" aria-hidden="true">
+                <span class="stage__crown"><Icon name="crown" size={24} /></span>
+                <span class="stage__num">{s.num}</span>
+                <span class="stage__unit">{s.unit}</span>
+              </div>
+              <div class="stage__body">
+                <h3>{s.brand}</h3>
+                <p class="stage__lead">{s.lead} {s.facts.join(". ")}.</p>
+                {s.places.length > 0 && (
+                  <ul class="stage__places" data-rec="R-007">
+                    {s.places.map((pl) => <li><span>{pl.street}</span> <span class="muted">{pl.district}</span></li>)}
+                  </ul>
+                )}
+                <div class="stage__actions">
+                  <a class="btn btn--outline" href={s.phone.href}><Icon name="phone" />{s.callLabel}</a>
+                  <FutureLink note={SOON}>Детальніше</FutureLink>
+                </div>
+              </div>
+              {photo && (
+                <div class="stage__photo">
+                  <Image src={photo.src} alt={photo.alt} widths={[400, 640, 880]} sizes="(min-width: 1024px) 24rem, calc(100vw - 2.5rem)" format="webp" quality={76} style={`object-position:${photo.pos}`} />
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+
+    <div class="track">
+      <h3 class="track__title">Поруч з кожним етапом</h3>
+      <ul class="track__list">
+        {track.map((t) => (
+          <li class="track__item" id={t.id}>
+            <h4>{t.title}</h4>
+            <p class="muted">{t.text}</p>
+            <div class="stage__actions">
+              <a class="btn btn--outline" href={PHONE_SCHOOL.href}><Icon name="phone" />Подзвонити</a>
+              <FutureLink note={SOON}>Детальніше</FutureLink>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .stages { position: relative; }
+  /* The vertical age scale: a yellow rule down the left edge */
+  .stages::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+    background: var(--color-accent); border-radius: 3px;
+  }
+  .stages__marker { display: none; }
+  .stage {
+    position: relative; display: grid; gap: var(--space-3);
+    padding: var(--space-4) 0 var(--space-5) var(--space-4);
+    border-top: 1px solid var(--color-line);
+  }
+  .stage:first-child { border-top: 0; padding-top: 0; }
+  .stage__mark { display: flex; align-items: baseline; gap: var(--space-1); }
+  .stage__crown { position: absolute; left: -9px; top: var(--space-4); color: var(--color-text); }
+  .stage:first-child .stage__crown { top: 0; }
+  .stage__num { font-family: var(--font-display); font-size: var(--text-scale); font-weight: 600; line-height: .95; letter-spacing: -0.02em; white-space: nowrap; }
+  .stage__unit { font-size: var(--text-small); font-weight: 500; color: var(--color-muted); }
+  .stage__body { display: grid; gap: var(--space-2); align-content: start; }
+  .stage__lead { max-width: 46ch; }
+  .stage__places { display: grid; gap: var(--space-1); font-size: var(--text-small); }
+  .stage__places li { display: grid; }
+  .stage__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-3); margin-top: var(--space-1); }
+  .stage__photo img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+
+  .track { display: grid; gap: var(--space-3); margin-top: var(--space-5); padding-left: var(--space-4); border-left: 2px dashed var(--color-border); }
+  .track__title { font-size: var(--text-h3); }
+  .track__list { display: grid; gap: var(--space-4); }
+  .track__item { display: grid; gap: var(--space-1); }
+  .track__item h4 { font-size: 1.375rem; font-weight: 600; }
+
+  @media (min-width: 768px) {
+    .stage { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: var(--space-4); }
+    .stage--photo { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+    .stage--photo .stage__photo { grid-column: 2; }
+    .stage__mark { flex-direction: column; align-items: flex-start; gap: var(--space-1); }
+    .track { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: var(--space-4); }
+    .track__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 1024px) {
+    .stage, .stage--photo { grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) minmax(0, 4fr); column-gap: var(--space-5); padding: var(--space-5) 0 var(--space-5) var(--space-5); }
+    .stage:first-child { padding-top: 0; }
+    .stage--photo .stage__photo { grid-column: 3; }
+    .stage__crown { left: -13px; top: var(--space-5); }
+    .track { grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); column-gap: var(--space-5); padding-left: var(--space-5); }
+    .stages::before { width: 8px; border-radius: 4px; }
+
+    /* Effect 2: one crown travels down the scale to the stage being read (scripts on, motion allowed) */
+    :global(html.crown-live) .stages__marker {
+      display: block; position: absolute; left: -12px; top: 0; z-index: 2; color: var(--color-text);
+      transform: translateY(var(--crown-y, 0px)); transition: transform 350ms var(--ease-out);
+    }
+    :global(html.crown-live) .stage__crown { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stages__marker { transition: none; }
+  }
+</style>

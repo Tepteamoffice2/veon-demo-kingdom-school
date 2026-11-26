@@ -1,0 +1,52 @@
+---
+import { Image } from "astro:assets";
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import { SOON } from "../data/site";
+import aboutPhoto from "../assets/photos/about-class.jpg";
+---
+<Section id="about" class="section about">
+  <div class="container about__grid">
+    <div class="about__text">
+      <h2>Про Kingdom Family</h2>
+      <ol class="timeline">
+        <li>
+          <span class="timeline__year">2015</span>
+          <p>Мережа почалася з центру розвитку «Маленьке Королівство».</p>
+        </li>
+        <li>
+          <span class="timeline__year">2023</span>
+          <p>Відкрито Kingdom Lyceum, ліцей 1–12 класів.</p>
+        </li>
+        <li>
+          <span class="timeline__year">Сьогодні</span>
+          <p>Садочки Kingdom Kids, школа Kingdom School і ліцей Kingdom Lyceum. Школа і ліцей ліцензовані.</p>
+        </li>
+      </ol>
+      <div class="future-links">
+        <FutureLink note={SOON}>Про нас</FutureLink>
+        <FutureLink note={SOON}>Публічна інформація</FutureLink>
+      </div>
+    </div>
+    <figure class="about__photo">
+      <Image src={aboutPhoto} alt="Урок у класі: учні піднімають руки, вчителька біля дошки" widths={[480, 720, 960, 1280]} sizes="(min-width: 1024px) 40rem, calc(100vw - 2.5rem)" format="webp" quality={76} />
+    </figure>
+  </div>
+</Section>
+
+<style>
+  .about__grid { display: grid; gap: var(--space-5); }
+  .about__text { display: grid; gap: var(--space-4); align-content: start; }
+  .timeline { position: relative; display: grid; gap: var(--space-4); padding-left: var(--space-4); }
+  .timeline::before { content: ""; position: absolute; left: 0; top: var(--space-1); bottom: var(--space-1); width: 6px; border-radius: 3px; background: var(--color-accent); }
+  .timeline li { display: grid; gap: var(--space-1); }
+  .timeline__year { font-family: var(--font-display); font-size: clamp(2.5rem, 2rem + 1.6vw, 3.5rem); font-weight: 600; line-height: 1; }
+  .timeline p { max-width: 40ch; }
+  .about__photo { margin: 0; }
+  .about__photo img { width: 100%; height: auto; aspect-ratio: 5 / 3; object-fit: cover; }
+
+  @media (min-width: 1024px) {
+    .about__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--space-6); align-items: center; }
+    .about__photo img { aspect-ratio: 4 / 3; }
+  }
+</style>

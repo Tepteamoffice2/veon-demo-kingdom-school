@@ -1,0 +1,48 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import { LOCATIONS, mapUrl, HOURS, INSTAGRAM, FACEBOOK } from "../data/site";
+---
+<Section id="contacts" rec="R-007" class="section contacts">
+  <div class="container">
+    <div class="section__head">
+      <h2>Контакти</h2>
+      <p>Три адреси у Львові. У кожного закладу свій номер. Графік: {HOURS.toLowerCase()}.</p>
+    </div>
+
+    <ul class="places">
+      {LOCATIONS.map((l) => (
+        <li class="place">
+          <div class="place__where">
+            <h3>{l.street}</h3>
+            <p class="muted">{l.place}, {l.district}</p>
+          </div>
+          <a class="place__phone" href={l.phone.href}><Icon name="phone" /><span class="visually-hidden">Подзвонити: </span>{l.phone.label}</a>
+          <a class="link-icon" href={mapUrl(l.street)} target="_blank" rel="noopener"><Icon name="map" />Відкрити на мапі<span class="visually-hidden"> ({l.street})</span></a>
+        </li>
+      ))}
+    </ul>
+
+    <ul class="socials">
+      <li><a class="link-icon" href={INSTAGRAM} target="_blank" rel="noopener"><Icon name="instagram" />Instagram</a></li>
+      <li><a class="link-icon" href={FACEBOOK} target="_blank" rel="noopener"><Icon name="facebook" />Facebook</a></li>
+    </ul>
+  </div>
+</Section>
+
+<style>
+  .places { display: grid; border-top: 2px solid var(--color-text); }
+  .place { display: grid; gap: var(--space-1); padding-block: var(--space-4); border-bottom: 1px solid var(--color-line); }
+  .place__where { display: grid; gap: var(--space-1); }
+  .place__phone {
+    justify-self: start; display: inline-flex; align-items: center; gap: var(--space-1); min-height: 2.75rem;
+    font-size: 1.25rem; font-weight: 600; text-decoration: none; white-space: nowrap;
+  }
+  .place__phone:hover { text-decoration: underline; }
+  .place__phone:active { opacity: .85; }
+  .socials { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin-top: var(--space-4); }
+
+  @media (min-width: 1024px) {
+    .place { grid-template-columns: minmax(0, 6fr) minmax(0, 3fr) minmax(0, 3fr); column-gap: var(--space-5); align-items: center; }
+  }
+</style>

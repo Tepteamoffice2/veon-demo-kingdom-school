@@ -1,0 +1,35 @@
+---
+// Phones under 768px: two call buttons pinned to the bottom once the first screen is passed (effect 5).
+import Icon from "./Icon.astro";
+import { PHONE_SCHOOL, PHONE_KIDS } from "../data/site";
+---
+<div class="callbar" data-callbar>
+  <a class="callbar__btn" href={PHONE_SCHOOL.href}><Icon name="phone" size={18} />Школа і ліцей</a>
+  <a class="callbar__btn" href={PHONE_KIDS.href}><Icon name="phone" size={18} />Садочки</a>
+</div>
+
+<style>
+  .callbar { display: none; }
+  @media (max-width: 767px) {
+    .callbar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-1);
+      padding: var(--space-1) var(--space) calc(var(--space-1) + env(safe-area-inset-bottom));
+      background: var(--color-bg); border-top: 1px solid var(--color-line);
+      transition: transform 300ms var(--ease-out), opacity 300ms var(--ease-out);
+    }
+    :global(html.js) .callbar:not(.is-shown), :global(html.menu-open) .callbar { transform: translateY(110%); opacity: 0; pointer-events: none; }
+  }
+  .callbar__btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1);
+    min-height: 3rem; padding: 0 var(--space-2); border-radius: var(--radius);
+    background: var(--color-accent); color: var(--color-accent-ink); border: 2px solid transparent;
+    font-weight: 600; font-size: 1rem; text-decoration: none; white-space: nowrap;
+  }
+  .callbar__btn:hover { border-color: var(--color-text); }
+  .callbar__btn:active { transform: scale(.98); }
+  @media (prefers-reduced-motion: reduce) {
+    .callbar { transition: none; }
+    .callbar__btn:active { transform: none; }
+  }
+</style>

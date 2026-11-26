@@ -1,0 +1,55 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { PHONE_SCHOOL, PHONE_KIDS, INSTAGRAM, SOON } from "../data/site";
+const phones = [
+  { ...PHONE_SCHOOL, title: "Школа, ліцей, Preschool, гуртки й табори" },
+  { ...PHONE_KIDS, title: "Садочки Kingdom Kids" },
+];
+---
+<Section id="admission" rec="R-001,G-R002,M-R003,S-R008" class="section admission">
+  <div class="container admission__grid">
+    <div class="admission__intro">
+      <h2>Як потрапити до нас</h2>
+      <p class="admission__now">Триває набір у 0–8 класи, у ліцеї — у 1–8, на 2026–2027 навчальний рік.</p>
+      <p>Запишіться на індивідуальну екскурсію за телефоном закладу. Вартість і вільні місця теж підкажуть телефоном.</p>
+      <div class="admission__more">
+        <a class="link-icon" href={INSTAGRAM} target="_blank" rel="noopener"><Icon name="instagram" />Написати в Instagram</a>
+        <FutureLink note={SOON}>Умови вступу та документи</FutureLink>
+      </div>
+    </div>
+
+    <ul class="admission__phones">
+      {phones.map((p) => (
+        <li>
+          <h3>{p.title}</h3>
+          <a class="admission__phone" href={p.href}><span class="visually-hidden">Подзвонити: </span>{p.label}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Section>
+
+<style>
+  .admission { padding-bottom: calc(var(--space-section) * 0.5); }
+  .admission__grid { display: grid; gap: var(--space-5); }
+  .admission__intro { display: grid; gap: var(--space-3); align-content: start; }
+  .admission__now { padding: var(--space-2) var(--space-3); background: var(--color-tint); border-radius: var(--radius); font-weight: 600; }
+  .admission__more { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-4); }
+  .admission__phones { display: grid; border-top: 2px solid var(--color-text); }
+  .admission__phones li { display: grid; gap: var(--space-1); padding-block: var(--space-4); border-bottom: 1px solid var(--color-line); }
+  .admission__phones h3 { font-family: var(--font-body); font-size: var(--text-body); font-weight: 600; line-height: 1.4; color: var(--color-muted); }
+  .admission__phone {
+    justify-self: start; display: inline-flex; align-items: center; min-height: 2.75rem;
+    font-family: var(--font-display); font-size: clamp(2.25rem, 1.5rem + 2.6vw, 3.5rem); font-weight: 600; line-height: 1.05;
+    text-decoration: underline; text-decoration-color: var(--color-accent); text-decoration-thickness: 6px; text-underline-offset: 0.18em;
+    white-space: nowrap; transition: text-decoration-color var(--dur-fast) var(--ease-out);
+  }
+  .admission__phone:hover { text-decoration-color: var(--color-text); }
+  .admission__phone:active { opacity: .85; }
+
+  @media (min-width: 1024px) {
+    .admission__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--space-6); }
+  }
+</style>

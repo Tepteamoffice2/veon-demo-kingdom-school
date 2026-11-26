@@ -1,0 +1,88 @@
+---
+import { Image } from "astro:assets";
+import Section from "./Section.astro";
+import AgeScale from "./AgeScale.astro";
+import Icon from "./Icon.astro";
+import heroPhoto from "../assets/photos/hero-reading.png";
+import { PHONE_SCHOOL, PHONE_KIDS } from "../data/site";
+
+interface Props { h1: string; }
+const { h1 } = Astro.props;
+---
+<Section id="hero" rec="R-003,G-R003" class="hero">
+  <div class="hero__text">
+    <a class="hero__announce" href="#admission" data-rec="R-001">Набір у 0–8 класи на 2026–2027 н. р.</a>
+    <h1 set:html={h1.replace("у Львові", '<span class="nw">у Львові</span>').replace("від 1 року", '<span class="nw">від 1 року</span>')} />
+    <p class="hero__lede">Садочки Kingdom Kids, школа повного дня і ліцей з поглибленою англійською.</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary hero__cta" href={PHONE_SCHOOL.href}><Icon name="phone" />Записатися на екскурсію</a>
+      <a class="link-arrow" href="#directions">Обрати за віком дитини<Icon name="arrow" /></a>
+    </div>
+    <p class="hero__kids">Садочки Kingdom Kids: <a href={PHONE_KIDS.href}>{PHONE_KIDS.label}</a></p>
+  </div>
+
+  <div class="hero__scale"><AgeScale /></div>
+
+  <figure class="hero__photo">
+    <Image
+      src={heroPhoto}
+      alt="Вихователька читає дітям книжку, діти сидять навколо на килимі"
+      widths={[480, 720, 960, 1280]}
+      sizes="(min-width: 1024px) 34rem, calc(100vw - 2.5rem)"
+      format="webp"
+      quality={78}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </figure>
+</Section>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: [full-start] var(--space) [content-start] minmax(0, 1fr) [content-end] var(--space) [full-end];
+    row-gap: var(--space-4);
+    padding-block: var(--space-3) var(--space-5);
+  }
+  .hero__text, .hero__scale, .hero__photo { grid-column: content; }
+  .hero__text { display: grid; justify-items: start; gap: var(--space-2); }
+  .hero__announce {
+    display: inline-flex; align-items: center; min-height: 2.75rem; padding: var(--space-1) var(--space-2);
+    background: var(--color-tint); border-radius: var(--radius); font-size: var(--text-small); font-weight: 600; text-decoration: none;
+  }
+  .hero__announce:hover { text-decoration: underline; }
+  .hero__announce:active { opacity: .85; }
+  .hero h1 :global(.nw) { white-space: nowrap; }
+  .hero h1 { max-width: 16ch; margin-top: var(--space-1); text-wrap: balance; }
+  .hero__lede { color: var(--color-muted); max-width: 40ch; }
+  .hero__actions { display: grid; gap: var(--space-1); width: 100%; margin-top: var(--space-1); }
+  .hero__cta { width: 100%; }
+  .hero__kids { font-weight: 500; }
+  .hero__kids a { font-weight: 600; white-space: nowrap; }
+  .hero__kids a:hover { text-decoration-thickness: 2px; }
+  .hero__photo { margin: 0; }
+  .hero__photo img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 40% 50%; }
+
+  @media (min-width: 640px) {
+    .hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); width: auto; }
+    .hero__cta { width: auto; }
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      grid-template-columns:
+        [full-start] minmax(var(--space), 1fr)
+        [content-start] minmax(0, 44rem) minmax(0, 33.5rem)
+        [content-end] minmax(var(--space), 1fr) [full-end];
+      grid-template-rows: 1fr auto;
+      row-gap: 0;
+      min-height: min(calc(100svh - var(--header-h)), 58rem);
+      padding-block: 0;
+    }
+    .hero__text { grid-column: 2; grid-row: 1; align-self: center; padding-block: var(--space-5); padding-right: var(--space-4); gap: var(--space-3); }
+    .hero h1 { max-width: 15ch; margin-top: 0; }
+    .hero__photo { grid-column: 3; grid-row: 1; align-self: end; padding-top: var(--space-4); }
+    .hero__photo img { height: clamp(26rem, calc(100svh - var(--header-h) - 10rem), 40rem); aspect-ratio: auto; border-radius: var(--radius-photo) var(--radius-photo) 0 0; object-position: 38% 50%; }
+    .hero__scale { grid-column: full; grid-row: 2; }
+  }
+</style>

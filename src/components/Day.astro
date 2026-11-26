@@ -1,0 +1,94 @@
+---
+import { Image } from "astro:assets";
+import Section from "./Section.astro";
+import dayPhoto from "../assets/photos/day-reading.jpg";
+
+const panels = [
+  {
+    id: "kids",
+    tab: "Садочок",
+    claims: [
+      "5-разове харчування з власної кухні",
+      "Прогулянки тричі на день",
+      "Адаптація з психологом",
+      "Відеоспостереження в усіх приміщеннях",
+      "Англійська від профільного викладача",
+    ],
+  },
+  {
+    id: "school",
+    tab: "Школа і ліцей",
+    claims: [
+      "Навчання повного дня",
+      "Без домашніх завдань",
+      "Англійська щодня",
+      "Понад 20 гуртків Kingdom Afterschool",
+    ],
+  },
+];
+---
+<Section id="day" class="section band-accent day">
+  <div class="container day__grid">
+    <div class="day__main">
+      <h2>Повний день: що входить</h2>
+      <div class="day__tabs" role="tablist" aria-label="Заклад" data-tabs>
+        {panels.map((p, i) => (
+          <button class="day__tab" type="button" role="tab" id={`day-tab-${p.id}`} aria-controls={`day-panel-${p.id}`}
+            aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>{p.tab}</button>
+        ))}
+      </div>
+      <div class="day__panels">
+        {panels.map((p, i) => (
+          <div class="day__panel" role="tabpanel" id={`day-panel-${p.id}`} aria-labelledby={`day-tab-${p.id}`} data-active={i === 0 ? "true" : "false"} tabindex="0">
+            <h3 class="day__panel-title">{p.tab}</h3>
+            <ul class="day__claims">
+              {p.claims.map((c) => <li>{c}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+    <figure class="day__photo">
+      <Image src={dayPhoto} alt="Троє дітей разом розглядають велику книжку на жовтій лаві" widths={[480, 720, 960]} sizes="(min-width: 1024px) 30rem, calc(100vw - 2.5rem)" format="webp" quality={76} />
+    </figure>
+  </div>
+</Section>
+
+<style>
+  .day__grid { display: grid; gap: var(--space-5); }
+  .day__main { display: grid; gap: var(--space-4); align-content: start; }
+  .day__tabs { display: none; }
+  .day__panels { display: grid; gap: var(--space-5); }
+  .day__panel-title { font-family: var(--font-body); font-size: var(--text-body); font-weight: 600; margin-bottom: var(--space-2); }
+  .day__claims { display: grid; }
+  .day__claims li {
+    padding-block: var(--space-2); border-top: 1px solid var(--color-text);
+    font-family: var(--font-display); font-size: var(--text-h3); font-weight: 500; line-height: 1.22;
+  }
+  .day__photo { margin: 0; }
+  .day__photo img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+
+  /* Scripts on: two tabs, the panels share one cell so the height is reserved (effect 3: cross-fade) */
+  :global(html.js) .day__tabs { display: inline-flex; gap: var(--space-1); padding: var(--space-1); border: 1px solid var(--color-text); border-radius: var(--radius); justify-self: start; }
+  :global(html.js) .day__panels { grid-template-areas: "panel"; }
+  :global(html.js) .day__panel { grid-area: panel; transition: opacity 250ms var(--ease-out), transform 250ms var(--ease-out), visibility 0s linear 0s; }
+  :global(html.js) .day__panel[data-active="false"] { opacity: 0; transform: translateY(8px); visibility: hidden; transition: opacity 250ms var(--ease-out), transform 250ms var(--ease-out), visibility 0s linear 250ms; }
+  :global(html.js) .day__panel-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .day__tab {
+    min-height: 2.75rem; padding: 0 var(--space-3); border: 0; border-radius: var(--radius-photo);
+    background: transparent; color: var(--color-text); font-family: var(--font-body); font-size: 1rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .day__tab:hover { text-decoration: underline; }
+  .day__tab:active { transform: scale(.98); }
+  .day__tab[aria-selected="true"] { background: var(--color-text); color: var(--color-on-ink); }
+  .day__panel:focus-visible { outline-offset: 8px; }
+
+  @media (min-width: 1024px) {
+    .day__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: var(--space-6); align-items: center; }
+    .day__photo img { aspect-ratio: 4 / 5; object-position: 50% 50%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .day__panel, :global(html.js) .day__panel[data-active="false"] { transition: none; transform: none; }
+  }
+</style>

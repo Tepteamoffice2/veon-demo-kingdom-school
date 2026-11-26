@@ -1,0 +1,91 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import { DEPARTMENTS } from "../data/site";
+const grades = Array.from({ length: 12 }, (_, i) => i + 1);
+---
+<Section id="program" class="section band-ink program">
+  <div class="container">
+    <div class="program__top">
+      <div class="program__lead">
+        <h2>Чого навчаємо</h2>
+        <p class="program__statement">Англійська щодня</p>
+        <p class="program__text">Розмовний клуб з носієм мови двічі на тиждень, групи за рівнем знань. Програма Pearson Education з підготовкою до міжнародних тестів.</p>
+      </div>
+
+      <figure class="grades" aria-labelledby="grades-caption">
+        <figcaption id="grades-caption" class="grades__caption">Що додається по класах</figcaption>
+        <ol class="grades__ruler" aria-hidden="true">
+          {grades.map((g) => <li class:list={["grades__tick", { "is-mark": g === 1 || g === 5 }]}>{g}</li>)}
+        </ol>
+        <dl class="grades__notes">
+          <div class="grades__note grades__note--1"><dt>З 1 класу</dt><dd>Фінансова грамотність і логіка</dd></div>
+          <div class="grades__note grades__note--5"><dt>З 5 класу</dt><dd>Soft skills</dd></div>
+        </dl>
+      </figure>
+    </div>
+
+    <div class="departments" data-rec="R-008">
+      <h3 class="departments__title">Чотири кафедри школи</h3>
+      <div class="departments__list">
+        {DEPARTMENTS.map((d) => (
+          <details class="dept">
+            <summary><span>{d.title}</span><Icon name="chevron" size={22} class="dept__chev" /></summary>
+            <p>{d.text}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .program__top { display: grid; gap: var(--space-5); }
+  .program__lead { display: grid; gap: var(--space-3); align-content: start; }
+  .program__statement { font-family: var(--font-display); font-size: var(--text-h1); font-weight: 600; line-height: 1.04; color: var(--color-accent); }
+  .program__text { color: var(--color-on-ink-muted); max-width: 48ch; }
+
+  .grades { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  .grades__caption { font-weight: 600; }
+  .grades__ruler { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); border-top: 2px solid var(--color-on-ink-muted); }
+  .grades__tick {
+    position: relative; padding-top: var(--space-2); text-align: center;
+    font-family: var(--font-display); font-size: 1.125rem; color: var(--color-on-ink-muted);
+  }
+  .grades__tick::before { content: ""; position: absolute; left: 50%; top: 0; width: 1px; height: var(--space-1); background: var(--color-on-ink-muted); }
+  .grades__tick.is-mark { color: var(--color-accent); font-weight: 600; }
+  .grades__tick.is-mark::before { width: 4px; margin-left: -2px; height: var(--space-2); background: var(--color-accent); }
+  .grades__notes { display: grid; gap: var(--space-3); margin: 0; }
+  .grades__note { display: grid; gap: 2px; }
+  .grades__note dt { display: inline-flex; align-items: center; gap: var(--space-1); font-size: var(--text-small); color: var(--color-on-ink-muted); }
+  .grades__note dt::before { content: ""; width: 10px; height: 10px; background: var(--color-accent); }
+  .grades__note dd { margin: 0; font-family: var(--font-display); font-size: var(--text-h3); font-weight: 500; line-height: 1.2; }
+
+  .departments { display: grid; gap: var(--space-3); margin-top: var(--space-6); }
+  .departments__title { font-size: var(--text-h3); }
+  .departments__list { display: grid; border-bottom: 1px solid var(--color-on-ink-muted); }
+  .dept { border-top: 1px solid var(--color-on-ink-muted); }
+  .dept summary {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-2);
+    min-height: 3.5rem; padding-block: var(--space-2); cursor: pointer; list-style: none;
+    font-family: var(--font-display); font-size: 1.375rem; font-weight: 500;
+  }
+  .dept summary::-webkit-details-marker { display: none; }
+  .dept summary:hover span { text-decoration: underline; text-underline-offset: .2em; }
+  .dept summary:active { opacity: .85; }
+  .dept summary :global(.dept__chev) { flex: none; transition: transform var(--dur-fast) var(--ease-out); }
+  .dept[open] summary :global(.dept__chev) { transform: rotate(180deg); }
+  .dept p { padding-bottom: var(--space-3); color: var(--color-on-ink-muted); }
+
+  @media (min-width: 1024px) {
+    .program__top { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: var(--space-6); }
+    .grades { padding-top: var(--space-6); }
+    .departments { grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); column-gap: var(--space-5); }
+    .departments__list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-5); border-bottom: 0; }
+    .dept { border-bottom: 0; }
+    .dept:nth-last-child(-n + 2) { border-bottom: 1px solid var(--color-on-ink-muted); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dept summary :global(.dept__chev) { transition: none; }
+  }
+</style>

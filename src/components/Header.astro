@@ -1,0 +1,126 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
+import Icon from "./Icon.astro";
+import { NAV, PHONE_SCHOOL, PHONE_KIDS, INSTAGRAM } from "../data/site";
+---
+<header class="site-header" data-header>
+  <div class="container header__inner">
+    <a class="header__logo" href="#hero">
+      <Image src={logo} alt="Kingdom School & Lyceum, на початок сторінки" width={140} height={62} densities={[1, 2]} format="webp" loading="eager" />
+    </a>
+
+    <nav class="header__nav" aria-label="Розділи сторінки" data-rec="R-002,R-008">
+      <ul>
+        {NAV.map((item) => <li><a href={item.href} data-nav-link>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="header__actions">
+      <a class="header__phone" href={PHONE_SCHOOL.href}>
+        <Icon name="phone" />
+        <span class="header__phone-text">{PHONE_SCHOOL.label}</span>
+        <span class="visually-hidden header__phone-sr">Подзвонити: школа і ліцей</span>
+      </a>
+      <a class="btn btn--primary header__cta" href={PHONE_SCHOOL.href}>Записатися на екскурсію</a>
+      <button class="header__burger" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+        <span class="header__burger-open"><Icon name="menu" size={24} /></span>
+        <span class="header__burger-close"><Icon name="close" size={24} /></span>
+        <span class="visually-hidden">Меню</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="menu" id="mobile-menu" data-menu hidden>
+    <div class="container menu__inner">
+      <ul class="menu__nav">
+        {NAV.map((item) => <li><a href={item.href} data-menu-link>{item.label}</a></li>)}
+      </ul>
+      <ul class="menu__phones">
+        {[PHONE_SCHOOL, PHONE_KIDS].map((p) => (
+          <li>
+            <span class="small muted">{p.who}</span>
+            <a href={p.href}>{p.label}</a>
+          </li>
+        ))}
+      </ul>
+      <a class="link-icon" href={INSTAGRAM} target="_blank" rel="noopener"><Icon name="instagram" />Instagram</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; background: var(--color-bg); border-bottom: 1px solid var(--color-line); }
+  .header__inner { display: flex; align-items: center; gap: var(--space-3); min-height: var(--header-h); }
+  .header__logo { display: inline-flex; flex: none; border-radius: var(--radius-photo); }
+  .header__logo img { width: auto; height: 3.4rem; border-radius: 0; }
+
+  .header__nav { display: none; margin-inline: auto; }
+  .header__nav ul { display: flex; gap: var(--space-2); }
+  .header__nav a {
+    position: relative; display: inline-flex; align-items: center; min-height: 2.75rem;
+    font-size: var(--text-small); font-weight: 500; text-decoration: none; white-space: nowrap;
+  }
+  .header__nav a::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: var(--space-1); height: 2px;
+    background: var(--color-text); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+  .header__nav a:hover::after, .header__nav a[aria-current="true"]::after { transform: scaleX(1); }
+  .header__nav a:active { opacity: .8; }
+
+  .header__actions { display: flex; align-items: center; gap: var(--space-2); margin-left: auto; }
+  .header__phone {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1);
+    min-width: 2.75rem; min-height: 2.75rem; border-radius: var(--radius);
+    font-weight: 600; text-decoration: none; white-space: nowrap;
+  }
+  .header__phone:hover .header__phone-text { text-decoration: underline; }
+  .header__phone:active { opacity: .8; }
+  .header__phone-text { display: none; }
+  .header__cta { display: none; }
+
+  .header__burger {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.75rem; height: 2.75rem; padding: 0; border: 1px solid var(--color-border); border-radius: var(--radius);
+    background: transparent; color: inherit; cursor: pointer;
+  }
+  .header__burger:hover { border-color: var(--color-text); }
+  .header__burger:active { transform: scale(.96); }
+  .header__burger-close { display: none; }
+  .header__burger[aria-expanded="true"] .header__burger-open { display: none; }
+  .header__burger[aria-expanded="true"] .header__burger-close { display: inline-flex; }
+  /* Without scripts the burger cannot open: the footer carries the same anchors. */
+  :global(html:not(.js)) .header__burger { display: none; }
+
+  .menu { border-top: 1px solid var(--color-line); background: var(--color-bg); max-height: calc(100dvh - var(--header-h)); overflow-y: auto; }
+  .menu[hidden] { display: none; }
+  .menu__inner { display: grid; gap: var(--space-4); padding-block: var(--space-3) var(--space-5); }
+  .menu__nav a {
+    display: flex; align-items: center; min-height: 3rem; border-bottom: 1px solid var(--color-line);
+    font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; text-decoration: none;
+  }
+  .menu__nav a:hover { text-decoration: underline; }
+  .menu__phones { display: grid; gap: var(--space-2); }
+  .menu__phones li { display: grid; }
+  .menu__phones a { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: 1.375rem; font-weight: 600; text-decoration: none; }
+  .menu__phones a:hover { text-decoration: underline; }
+
+  @media (min-width: 768px) {
+    .header__cta { display: inline-flex; }
+  }
+  @media (min-width: 1200px) {
+    .header__nav { display: block; }
+    .header__nav + .header__actions { margin-left: 0; }
+    .header__burger, .menu { display: none; }
+    .header__phone-text { display: inline; }
+    .header__phone .icon { display: none; }
+    .header__phone-sr { display: none; }
+  }
+  @media (min-width: 1360px) {
+    .header__nav ul { gap: var(--space-3); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .header__nav a::after { transition: none; }
+  }
+</style>

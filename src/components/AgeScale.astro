@@ -1,0 +1,73 @@
+---
+// Signature: the yellow age scale at the foot of the first screen. Each segment jumps to its stage in #directions.
+import { STAGES } from "../data/site";
+import Icon from "./Icon.astro";
+---
+<div class="scale" data-rec="R-002">
+  <span class="scale__fill" aria-hidden="true"></span>
+  <ol class="scale__list" aria-label="Етапи за віком дитини">
+    {STAGES.map((s, i) => (
+      <li class="scale__item" style={`--i:${i}`}>
+        <a class="scale__seg" href={`#${s.id}`}>
+          <span class="scale__title">{s.scaleTitle}</span>
+          <span class="scale__note">{s.scaleNote}</span>
+          <Icon name="arrow-down" size={18} class="scale__arrow" />
+        </a>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .scale { position: relative; }
+  .scale__list { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-1); }
+  .scale__fill { display: none; }
+  .scale__seg {
+    position: relative; display: grid; align-content: start; gap: 2px; height: 100%; min-height: 5.5rem;
+    padding: var(--space-3) var(--space-2) var(--space-2);
+    background: var(--color-accent); color: var(--color-accent-ink); border-radius: var(--radius-photo);
+    text-decoration: none;
+  }
+  .scale__seg::before {
+    content: ""; position: absolute; left: var(--space-2); top: 0; width: 2px; height: var(--space-2);
+    background: var(--color-text);
+  }
+  .scale__title { font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; line-height: 1.1; }
+  .scale__note { font-size: var(--text-small); font-weight: 500; line-height: 1.3; }
+  .scale__seg :global(.scale__arrow) { position: absolute; right: var(--space-2); top: var(--space-2); transition: transform var(--dur-fast) var(--ease-out); }
+  .scale__seg:hover .scale__title { text-decoration: underline; text-decoration-thickness: 2px; }
+  .scale__seg:hover :global(.scale__arrow) { transform: translateY(3px); }
+  .scale__seg:active { opacity: .85; }
+
+  /* Mobile: the four segments appear one after another (opacity only) */
+  @keyframes scale-in { from { opacity: 0; } to { opacity: 1; } }
+  .scale__item { animation: scale-in 400ms var(--ease-out) both; animation-delay: calc(var(--i) * 80ms + 150ms); }
+
+  @media (min-width: 1024px) {
+    .scale { padding-block: 0; }
+    .scale__fill {
+      display: block; position: absolute; inset: 0; background: var(--color-accent);
+      transform-origin: left center; animation: scale-fill 800ms var(--ease-out) 150ms both;
+    }
+    .scale__list {
+      width: min(100% - 2 * var(--space), var(--container)); margin-inline: auto;
+      grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0;
+    }
+    .scale__item { animation: none; }
+    .scale__seg { min-height: 7rem; padding: var(--space-4) var(--space-3) var(--space-3); background: transparent; border-radius: 0; }
+    .scale__seg::before { left: 0; height: var(--space-3); animation: scale-in 300ms var(--ease-out) both; animation-delay: calc(var(--i) * 120ms + 500ms); }
+    .scale__seg::after {
+      content: ""; position: absolute; left: 50%; top: 0; width: 1px; height: var(--space-2);
+      background: var(--color-text); animation: scale-in 300ms var(--ease-out) both; animation-delay: calc(var(--i) * 120ms + 560ms);
+    }
+    .scale__title { font-size: 1.625rem; }
+    .scale__seg :global(.scale__arrow) { right: var(--space-3); top: var(--space-4); }
+  }
+  @keyframes scale-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scale__item, .scale__fill, .scale__seg::before, .scale__seg::after { animation: none; }
+    .scale__seg :global(.scale__arrow) { transition: none; }
+    .scale__seg:hover :global(.scale__arrow) { transform: none; }
+  }
+</style>

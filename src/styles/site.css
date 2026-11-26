@@ -1,0 +1,61 @@
+/* Kingdom School: shared page parts (buttons, headings, bands, FutureLink). All values come from tokens.css. */
+html { overflow-x: clip; scrollbar-color: var(--color-border) var(--color-bg); }
+body { overflow-x: clip; font-size: var(--text-body); font-synthesis: none; }
+::selection { background: var(--color-tint); color: var(--color-text); }
+h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); font-weight: 600; color: inherit; overflow-wrap: break-word; min-width: 0; text-wrap: balance; }
+h1 { font-size: var(--text-h1); line-height: 1.06; letter-spacing: -0.01em; }
+h2 { font-size: var(--text-h2); line-height: 1.1; letter-spacing: -0.005em; }
+h3 { font-size: var(--text-h3); line-height: 1.22; font-weight: 500; }
+p { margin: 0; max-width: 65ch; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+img { border-radius: var(--radius-photo); }
+
+.section { padding-block: var(--space-section); }
+.section__head { display: grid; gap: var(--space-2); margin-bottom: var(--space-5); }
+.section__head p { color: var(--color-muted); }
+.small { font-size: var(--text-small); line-height: 1.45; }
+.muted { color: var(--color-muted); }
+
+/* Bands: change of density down the page */
+.band-accent { background: var(--color-accent); color: var(--color-accent-ink); --color-muted: var(--color-text); }
+.band-ink { background: var(--color-text); color: var(--color-on-ink); --color-focus: var(--color-accent); --color-muted: var(--color-on-ink-muted); }
+
+/* Buttons: one primary style (yellow) and an outline for per-place calls */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1);
+  min-height: var(--control-h); padding: 0 var(--space-3);
+  border: 2px solid transparent; border-radius: var(--radius);
+  font-family: var(--font-body); font-size: 1.0625rem; font-weight: 600; line-height: 1;
+  white-space: nowrap; text-decoration: none; cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.btn--primary { background: var(--color-accent); color: var(--color-accent-ink); }
+.btn--primary:hover { border-color: var(--color-text); transform: translateY(-2px); }
+.btn--outline { background: transparent; color: inherit; border-color: var(--color-border); }
+.btn--outline:hover { border-color: currentColor; transform: translateY(-2px); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { cursor: not-allowed; opacity: .55; }
+
+/* Secondary action: a text link with an arrow icon set apart by a gap */
+.link-arrow { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 2.75rem; font-weight: 600; text-decoration: underline; text-decoration-thickness: 1px; }
+.link-arrow .icon { transition: transform var(--dur-fast) var(--ease-out); }
+.link-arrow:hover .icon { transform: translateX(4px); }
+.link-arrow:hover { text-decoration-thickness: 2px; }
+.link-arrow:active { opacity: .8; }
+
+.link-icon { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 2.75rem; text-decoration: none; font-weight: 500; }
+.link-icon:hover { text-decoration: underline; }
+.link-icon:active { opacity: .8; }
+
+/* FutureLink: a calm inactive state for pages built after approval */
+.future-link { color: var(--color-muted); text-decoration: underline dashed; text-decoration-thickness: 1px; text-underline-offset: 0.25em; min-height: 2.75rem; cursor: not-allowed; }
+.future-link:hover { color: inherit; }
+.future-link:active { opacity: .8; }
+.future-link__note[aria-hidden="true"] { font-family: var(--font-body); font-weight: 500; text-decoration: none; }
+.band-ink .future-link__note[aria-hidden="true"] { background: var(--color-on-ink); color: var(--color-text); }
+.future-links { display: flex; flex-wrap: wrap; column-gap: var(--space-4); row-gap: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover, .btn:active, .link-arrow:hover .icon { transform: none; }
+}

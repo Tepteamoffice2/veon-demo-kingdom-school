@@ -1,0 +1,60 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Directions from "../components/Directions.astro";
+import Day from "../components/Day.astro";
+import Program from "../components/Program.astro";
+import Afterschool from "../components/Afterschool.astro";
+import Admission from "../components/Admission.astro";
+import About from "../components/About.astro";
+import Contacts from "../components/Contacts.astro";
+import Footer from "../components/Footer.astro";
+import CallBar from "../components/CallBar.astro";
+import displayFont from "../assets/fonts/piazzolla-cyrillic-opsz-normal.woff2?url";
+import { LOCATIONS, INSTAGRAM, FACEBOOK, LEGAL_NAME } from "../data/site";
+
+// veon-concept (design/concept.md): H1 is used exactly as written there.
+const H1 = "Приватний садок, школа і ліцей у Львові — від 1 року до 12 класу";
+const TITLE = "Kingdom School — приватний садок, школа і ліцей у Львові";
+const DESCRIPTION = "Садочки Kingdom Kids з 1 року, Preschool, школа повного дня 1–4 і ліцей 1–12 у Львові. Поглиблена англійська, 20+ гуртків, табори. Запис на екскурсію.";
+
+// R-009: structured data with confirmed fields only (no rating, no hours, no e-mail).
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: "Kingdom School",
+  legalName: LEGAL_NAME,
+  telephone: ["+380975959549", "+380673131600"],
+  address: LOCATIONS.map((l) => ({
+    "@type": "PostalAddress",
+    streetAddress: l.street,
+    addressLocality: "Львів",
+    addressCountry: "UA",
+  })),
+  sameAs: [INSTAGRAM, FACEBOOK],
+};
+---
+<Base lang="uk" title={TITLE} description={DESCRIPTION} rec="R-009,R-SEO-03,R-SEO-04,R-SEO-05,R-SEO-06">
+  <Fragment slot="head">
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+  <Header slot="header" />
+  <Hero h1={H1} />
+  <Directions />
+  <Day />
+  <Program />
+  <Afterschool />
+  <Admission />
+  <About />
+  <Contacts />
+  <Fragment slot="footer">
+    <Footer />
+    <CallBar />
+  </Fragment>
+</Base>
+
+<script>
+  import "../scripts/page.ts";
+</script>

@@ -1,0 +1,65 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { NAV, PHONE_SCHOOL, PHONE_KIDS, INSTAGRAM, FACEBOOK, LEGAL_NAME, SOON } from "../data/site";
+---
+<footer class="site-footer">
+  <div class="container footer__grid">
+    <a class="footer__logo" href="#hero">
+      <Image src={logo} alt="Kingdom School & Lyceum, на початок сторінки" width={144} height={64} densities={[1, 2]} format="webp" />
+    </a>
+
+    <nav class="footer__nav" aria-label="Розділи сторінки, нижнє меню">
+      <ul>{NAV.map((n) => <li><a href={n.href}>{n.label}</a></li>)}</ul>
+    </nav>
+
+    <ul class="footer__phones">
+      {[PHONE_SCHOOL, PHONE_KIDS].map((p) => (
+        <li><span class="small muted">{p.who}</span><a href={p.href}>{p.label}</a></li>
+      ))}
+    </ul>
+
+    <div class="footer__side">
+      <ul class="footer__socials">
+        <li><a class="link-icon" href={INSTAGRAM} target="_blank" rel="noopener"><Icon name="instagram" />Instagram</a></li>
+        <li><a class="link-icon" href={FACEBOOK} target="_blank" rel="noopener"><Icon name="facebook" />Facebook</a></li>
+      </ul>
+      <ul class="footer__future">
+        <li><FutureLink note={SOON}>Новини</FutureLink></li>
+        <li><FutureLink note={SOON}>Публічна інформація</FutureLink></li>
+        <li><FutureLink note={SOON}>Політика конфіденційності</FutureLink></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer__legal small muted">© {LEGAL_NAME}</div>
+</footer>
+
+<style>
+  .site-footer { border-top: 2px solid var(--color-text); padding-block: var(--space-6) var(--space-4); }
+  .footer__grid { display: grid; gap: var(--space-4); }
+  .footer__logo { justify-self: start; display: inline-flex; }
+  .footer__logo img { width: auto; height: 3.5rem; border-radius: 0; }
+  .footer__nav ul { display: grid; gap: 0; }
+  .footer__nav a { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; font-weight: 500; }
+  .footer__nav a:hover { text-decoration: underline; }
+  .footer__nav a:active { opacity: .8; }
+  .footer__phones { display: grid; gap: var(--space-2); align-content: start; }
+  .footer__phones li { display: grid; }
+  .footer__phones a { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: 1.125rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .footer__phones a:hover { text-decoration: underline; }
+  .footer__side { display: grid; gap: var(--space-2); align-content: start; }
+  .footer__socials, .footer__future { display: grid; }
+  .footer__legal { margin-top: var(--space-5); padding-top: var(--space-3); border-top: 1px solid var(--color-line); }
+
+  @media (max-width: 767px) {
+    .site-footer { padding-bottom: calc(var(--space-4) + var(--control-h) + var(--space-2)); }
+  }
+  @media (min-width: 768px) {
+    .footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-5); }
+  }
+  @media (min-width: 1024px) {
+    .footer__grid { grid-template-columns: minmax(0, 3fr) minmax(0, 3fr) minmax(0, 3fr) minmax(0, 3fr); }
+  }
+</style>

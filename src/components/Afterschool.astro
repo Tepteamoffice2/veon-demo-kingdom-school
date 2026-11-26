@@ -1,0 +1,79 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { CLUBS, CAMPS, PHONE_SCHOOL, SOON } from "../data/site";
+const VISIBLE_ON_PHONE = 8;
+---
+<Section id="afterschool" class="section afterschool">
+  <div class="container">
+    <div class="section__head">
+      <h2>Гуртки й табори</h2>
+      <p>Kingdom Afterschool: понад 20 гуртків і студій. Розклад, вік і вартість підкажуть за телефоном <a class="nowrap" href={PHONE_SCHOOL.href}>{PHONE_SCHOOL.label}</a>.</p>
+    </div>
+
+    <div class="afterschool__grid">
+      <div class="clubs" data-clubs>
+        <h3>Гуртки</h3>
+        <ul class="clubs__list" id="clubs-list">
+          {CLUBS.map((c, i) => <li class:list={{ "clubs__extra": i >= VISIBLE_ON_PHONE }}>{c}</li>)}
+        </ul>
+        <button class="btn btn--outline clubs__more" type="button" aria-expanded="false" aria-controls="clubs-list" data-clubs-more data-rec="R-008">
+          <span data-label>Показати всі гуртки</span><Icon name="chevron" size={18} />
+        </button>
+        <div class="future-links clubs__all"><FutureLink note={SOON}>Усі гуртки</FutureLink></div>
+      </div>
+
+      <div class="camps">
+        <h3>Сезонні табори</h3>
+        <ul class="camps__list">
+          {CAMPS.map((c) => (
+            <li>
+              <h4>{c.title}</h4>
+              {c.note && <p class="small muted">{c.note}</p>}
+            </li>
+          ))}
+        </ul>
+        <p class="small muted">Є також виїзні табори.</p>
+        <div class="future-links"><FutureLink note={SOON}>Табори</FutureLink></div>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .afterschool { padding-bottom: calc(var(--space-section) * 0.5); }
+  .nowrap { white-space: nowrap; font-weight: 600; }
+  .afterschool__grid { display: grid; gap: var(--space-6); }
+  .clubs, .camps { display: grid; gap: var(--space-3); align-content: start; }
+  .clubs__list { display: grid; grid-template-columns: minmax(0, 1fr); border-top: 1px solid var(--color-text); }
+  .clubs__list li {
+    padding-block: var(--space-1); border-bottom: 1px solid var(--color-line);
+    font-family: var(--font-display); font-size: 1.375rem; font-weight: 500; line-height: 1.3;
+  }
+  .clubs__more { display: none; justify-self: start; }
+  .clubs__more :global(.icon) { transition: transform var(--dur-fast) var(--ease-out); }
+  .clubs__more[aria-expanded="true"] :global(.icon) { transform: rotate(180deg); }
+
+  .camps__list { display: grid; border-top: 1px solid var(--color-text); }
+  .camps__list li { display: grid; gap: 2px; padding-block: var(--space-2); border-bottom: 1px solid var(--color-line); }
+  .camps__list h4 { font-size: var(--text-h3); font-weight: 500; }
+
+  /* Phones: first 8 clubs, the rest behind "Показати всі" (scripts on only) */
+  @media (max-width: 767px) {
+    :global(html.js) .clubs__more { display: inline-flex; }
+    :global(html.js) .clubs__all { display: none; }
+    :global(html.js) [data-clubs]:not(.is-open) .clubs__extra { display: none; }
+  }
+  @media (min-width: 768px) {
+    .clubs__list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-4); }
+  }
+  @media (min-width: 1024px) {
+    .afterschool__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: var(--space-6); }
+    .clubs__list { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--space-3); }
+    .clubs__list li { font-size: 1.25rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .clubs__more :global(.icon) { transition: none; }
+  }
+</style>
