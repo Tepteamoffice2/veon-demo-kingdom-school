@@ -19,7 +19,7 @@ const { lang, title, description, canonical, rec } = Astro.props;
     <meta property="og:description" content={description} />
     <meta property="og:locale" content="uk_UA" />
     <meta name="theme-color" content="#FBFBF8" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={`${import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + "/"}favicon.svg`} type="image/svg+xml" />
     <meta name="robots" content="noindex" />
     <slot name="head" />
   </head>
